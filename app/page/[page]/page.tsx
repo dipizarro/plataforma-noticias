@@ -15,14 +15,14 @@ type Article = {
 };
 
 async function getNews(): Promise<{ articles: Article[] }> {
-  const res = await fetch("http://localhost:3000/api/news");
+  const res = await fetch("/api/news");
   if (!res.ok) throw new Error("Error al obtener las noticias");
   return res.json();
 }
 
 async function summarizeText(text: string): Promise<string> {
   try {
-    const res = await fetch("http://localhost:3000/api/summarize", {
+    const res = await fetch("/api/summarize", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text }),
@@ -87,7 +87,7 @@ export default function PaginatedNews() {
     const textToTranslate = `${title}. ${description || ""}`;
 
     try {
-      const res = await fetch("http://localhost:3000/api/translate", {
+      const res = await fetch("/api/translate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: textToTranslate }),

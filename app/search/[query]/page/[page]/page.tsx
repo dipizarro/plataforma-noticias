@@ -4,12 +4,13 @@ import SearchResultsClient from "@/../app/search/[query]/page/[page]/SearchResul
 export async function generateMetadata({
   params,
 }: {
-  params: { query: string; page: string };
+  params: Promise<{ query: string; page: string }>;
 }): Promise<Metadata> {
-  const searchQuery = decodeURIComponent(params.query);
+  const { query, page } = await params;
+  const searchQuery = decodeURIComponent(query);
 
   return {
-    title: `Buscar: ${searchQuery} – Página ${params.page}`,
+    title: `Buscar: ${searchQuery} – Página ${page}`,
     description: `Resultados de búsqueda para "${searchQuery}", resumidos y traducidos automáticamente.`,
     openGraph: {
       title: `Buscar: ${searchQuery}`,

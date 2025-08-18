@@ -134,7 +134,7 @@ export default function CategoryPageClient() {
     };
 
     fetchData();
-  }, [category, page]);
+  }, [searchCategory, currentPage]);
 
   const goToPage = (newPage: number) => {
     router.push(`/category/${searchCategory}/page/${newPage}`);

@@ -17,7 +17,7 @@ type Article = {
 
 async function summarizeText(text: string): Promise<string> {
   try {
-    const res = await fetch("http://localhost:3000/api/summarize", {
+    const res = await fetch("/api/summarize", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text }),
@@ -93,7 +93,7 @@ export default function SearchResultsPage() {
     };
 
     fetchData();
-  }, [query, page]);
+  }, [searchQuery, currentPage]);
 
   const translateArticle = async (index: number, title: string, description: string | undefined) => {
     setLoading((prev) => ({ ...prev, [index]: true }));
@@ -101,7 +101,7 @@ export default function SearchResultsPage() {
     const textToTranslate = `${title}. ${description || ""}`;
 
     try {
-      const res = await fetch("http://localhost:3000/api/translate", {
+      const res = await fetch("/api/translate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: textToTranslate }),

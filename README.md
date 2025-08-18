@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📰 Plataforma de Noticias Inteligentes
 
-## Getting Started
+Una aplicación web moderna desarrollada con Next.js 15 que ofrece noticias resumidas automáticamente con inteligencia artificial y traducción automática.
 
-First, run the development server:
+## 🚀 Características
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Búsqueda de Noticias**: Integración con NewsAPI.org
+- **Navegación por Categorías**: General, Tecnología, Negocios, Entretenimiento, Salud, Ciencia, Deportes
+- **Resumen Automático con IA**: Utiliza el modelo BART de Hugging Face
+- **Traducción Automática**: Integración con MyMemory Translation API
+- **Paginación**: Navegación eficiente por grandes volúmenes de contenido
+- **Diseño Responsive**: Optimizado para todos los dispositivos
+
+## 🛠️ Tecnologías
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Estilos**: Tailwind CSS
+- **APIs**: NewsAPI.org, Hugging Face, MyMemory Translation
+
+## 📋 Variables de Entorno
+
+Crea un archivo `.env.local` en la raíz del proyecto con las siguientes variables:
+
+```env
+# NewsAPI.org - Para obtener noticias
+NEWS_API_KEY=your_news_api_key_here
+
+# Hugging Face - Para generar resúmenes con IA
+HUGGINGFACE_API_KEY=your_huggingface_api_key_here
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Obtener las API Keys:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **NewsAPI.org**: Regístrate en [newsapi.org](https://newsapi.org) para obtener tu API key gratuita
+2. **Hugging Face**: Regístrate en [huggingface.co](https://huggingface.co) y genera un token de acceso
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Instalación y Desarrollo
 
-## Learn More
+```bash
+# Instalar dependencias
+npm install
 
-To learn more about Next.js, take a look at the following resources:
+# Ejecutar en modo desarrollo
+npm run dev
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Construir para producción
+npm run build
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Ejecutar en producción
+npm start
+```
 
-## Deploy on Vercel
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador para ver el resultado.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🌐 Despliegue en Vercel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Conecta tu repositorio de GitHub a Vercel
+2. Configura las variables de entorno en el dashboard de Vercel
+3. ¡Listo! Tu aplicación se desplegará automáticamente
+
+## 📁 Estructura del Proyecto
+
+```
+plataforma-noticias/
+├── app/
+│   ├── api/                 # APIs internas
+│   ├── components/          # Componentes reutilizables
+│   ├── category/           # Páginas de categorías
+│   ├── search/             # Páginas de búsqueda
+│   └── page.tsx            # Página principal
+├── components/             # Componentes globales
+└── public/                # Archivos estáticos
+```
+
+## 🤝 Contribuir
+
+Las contribuciones son bienvenidas. Por favor, abre un issue o un pull request.
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT.

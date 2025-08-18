@@ -4,13 +4,14 @@ import CategoryPageClient from "@/../app/category/[category]/page/[page]/Categor
 export async function generateMetadata({
   params,
 }: {
-  params: { category: string; page: string };
+  params: Promise<{ category: string; page: string }>;
 }): Promise<Metadata> {
-  const category = decodeURIComponent(params.category);
+  const { category, page } = await params;
+  const decodedCategory = decodeURIComponent(category);
 
   return {
-    title: `Noticias de ${category} – Página ${params.page}`,
-    description: `Explora noticias resumidas y traducidas de la categoría ${category}. Página ${params.page}.`,
+    title: `Noticias de ${decodedCategory} – Página ${page}`,
+    description: `Explora noticias resumidas y traducidas de la categoría ${decodedCategory}. Página ${page}.`,
   };
 }
 
