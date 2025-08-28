@@ -2,7 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import LoadingSpinner from "@/../app/components/LoadingSpinner";
+import SkeletonLoader from "@/../app/components/SkeletonLoader";
+import ErrorDisplay from "@/../app/components/ErrorDisplay";
+import EmptyState from "@/../app/components/EmptyState";
+import NewsCard from "@/../app/components/NewsCard";
 
 type Article = {
   source: { name: string };
@@ -47,12 +50,19 @@ export default function SearchResultsPage() {
   const [loading, setLoading] = useState<{ [key: number]: boolean }>({});
   const [totalPages, setTotalPages] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true); // ⏳ Inicia
-      try{
-        const res = await fetch(`/api/news?q=${encodeURIComponent(searchQuery)}`);
+  const fetchData = async () => {
+    setIsLoading(true);
+    setError(null);
+    
+    try {
+      const res = await fetch(`/api/news?q=${encodeURIComponent(searchQuery)}`);
+      
+      if (!res.ok) {
+        throw new Error("No se pudieron obtener las noticias");
+      }
+      
       const data = await res.json();
 
       if (!data.articles || data.articles.length === 0) {
@@ -84,14 +94,15 @@ export default function SearchResultsPage() {
       }, {});
 
       setSummaries(summariesMap);
-      } catch (error) {
-        console.error("❌ Error al cargar noticias:", error);
-      } finally {
-        setIsLoading(false); // ✅ Finaliza
-      }
-      
-    };
+    } catch (error) {
+      console.error("❌ Error al cargar noticias:", error);
+      setError("No se pudieron cargar las noticias. Verifica tu conexión a internet e intenta de nuevo.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [searchQuery, currentPage]);
 
@@ -130,68 +141,89 @@ export default function SearchResultsPage() {
     router.push(`/search/${encodeURIComponent(searchQuery)}/page/${newPage}`);
   };
 
-  if (currentPage > totalPages || currentPage < 1) {
+  // Manejo de errores
+  if (error) {
     return (
-      <div className="text-center mt-20 text-red-600 text-xl font-semibold">
-        Página no encontrada 😢
-      </div>
+      <ErrorDisplay
+        title="Error al cargar noticias"
+        message={error}
+        onRetry={fetchData}
+      />
     );
   }
 
-  if (isLoading) return <LoadingSpinner message="Cargando noticias..." />;
+  // Manejo de páginas inválidas
+  if (currentPage > totalPages || currentPage < 1) {
+    return (
+      <ErrorDisplay
+        title="Página no encontrada"
+        message="La página que buscas no existe. Verifica la URL e intenta de nuevo."
+        showRetry={false}
+      />
+    );
+  }
+
+  // Estado de carga
+  if (isLoading) {
+    return <SkeletonLoader count={6} />;
+  }
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6 text-center text-gray-800">
-        Resultados de búsqueda: <span className="text-blue-600">{searchQuery}</span>
+      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">
+        Resultados de búsqueda: <span className="text-blue-600 dark:text-blue-400">{searchQuery}</span>
       </h1>
 
       {articles.length === 0 ? (
-        <p className="text-center text-gray-500">No se encontraron noticias para esta búsqueda.</p>
+        <EmptyState 
+          title="No se encontraron noticias"
+          message={`No encontramos noticias para "${searchQuery}". Intenta con otros términos de búsqueda o explora nuestras categorías.`}
+        />
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {articles.map((article, index) => (
-              <div key={index} className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-                {article.urlToImage ? (
-                  <img src={article.urlToImage} alt={article.title} className="w-full h-48 object-cover rounded-md mb-4" />
-                ) : (
-                  <div className="w-full h-48 bg-gray-300 rounded-md flex items-center justify-center">
-                    <span className="text-gray-600">Sin imagen</span>
-                  </div>
-                )}
-                <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                  {translations[index] ? translations[index].title : article.title}
-                </h2>
-                <p className="text-gray-600">
-                  {translations[index] ? translations[index].description : summaries[index] || "Generando resumen..."}
-                </p>
-
-                <div className="flex items-center justify-between mt-4">
-                  <button
-                    onClick={() => translateArticle(index, article.title, summaries[index])}
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all"
-                    disabled={loading[index]}
-                  >
-                    {loading[index] ? "Traduciendo..." : translations[index] ? "Ver original" : "Traducir"}
-                  </button>
-
-                  <a href={article.url} target="_blank" className="text-blue-500 hover:underline">Leer más →</a>
-                </div>
-              </div>
+              <NewsCard
+                key={index}
+                article={article}
+                showTranslation={!!translations[index]}
+                translation={translations[index]}
+                onTranslate={() => translateArticle(index, article.title, summaries[index])}
+                isTranslating={loading[index]}
+              />
             ))}
           </div>
 
-          <div className="flex justify-center items-center gap-4 mt-8">
+          {/* Navegación mejorada */}
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mt-8 sm:mt-12">
             {currentPage > 1 && (
-              <button onClick={() => goToPage(currentPage - 1)} className="text-blue-600 hover:underline">
-                ← Página anterior
+              <button 
+                onClick={() => goToPage(currentPage - 1)} 
+                className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 transition-all font-medium shadow-sm hover:shadow-md min-h-[44px]"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                <span className="hidden sm:inline">Anterior</span>
               </button>
             )}
-            <span className="font-medium">Página {currentPage} de {totalPages}</span>
+            
+            <div className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Página</span>
+              <span className="text-lg font-bold text-blue-600 dark:text-blue-400">{currentPage}</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">de</span>
+              <span className="text-lg font-bold text-gray-900 dark:text-white">{totalPages}</span>
+            </div>
+            
             {currentPage < totalPages && (
-              <button onClick={() => goToPage(currentPage + 1)} className="text-blue-600 hover:underline">
-                Página siguiente →
+              <button 
+                onClick={() => goToPage(currentPage + 1)} 
+                className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 transition-all font-medium shadow-sm hover:shadow-md min-h-[44px]"
+              >
+                <span className="hidden sm:inline">Siguiente</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </button>
             )}
           </div>
