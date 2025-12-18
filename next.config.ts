@@ -35,16 +35,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "**.eluniversal.com.mx" },
     ],
   },
-  experimental: {
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
-  },
+
 };
 
 export default nextConfig;
