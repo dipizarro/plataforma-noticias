@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy Node.js app to Azure Web App - ainewsletter
 
 on:
@@ -13,41 +10,50 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up Node.js version
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20.x'
+          cache: 'npm'
 
-      - name: npm install, build, and test
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # IMPORTANT: do NOT include node_modules in the deploy package
+      - name: Create deployment package
         run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+          zip -r app.zip . \
+            -x "**/node_modules/**" \
+            -x "**/.git/**" \
+            -x "**/.next/cache/**"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .
+          path: app.zip
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write
+      contents: read
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: node-app
-      
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -55,11 +61,9 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7D44C3586F5E43118C1967F7AE1DEA09 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_5578906308264E569F10A6FC20E4AD79 }}
 
-      - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'ainewsletter'
           slot-name: 'Production'
-          package: .
-          
+          package: app.zip
