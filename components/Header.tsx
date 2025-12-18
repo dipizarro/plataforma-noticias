@@ -3,9 +3,9 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
-import HeaderSearch from "@/../app/components/HeaderSearch";
-import { useTheme } from "@/../app/contexts/ThemeContext";
-import { useFavorites } from "@/../app/contexts/FavoritesContext";
+import HeaderSearch from "@/app/components/HeaderSearch";
+import { useTheme } from "@/app/contexts/ThemeContext";
+import { useFavorites } from "@/app/contexts/FavoritesContext";
 
 export default function Header() {
   const pathname = usePathname();
@@ -30,7 +30,7 @@ export default function Header() {
         <Link href="/" className="text-xl md:text-2xl font-bold hover:text-blue-100 transition-colors">
           Plataforma de Noticias 🚀
         </Link>
-        
+
         {/* Búsqueda - oculta en móviles */}
         <div className="hidden md:block">
           <HeaderSearch />
@@ -53,37 +53,34 @@ export default function Header() {
         <nav className="hidden md:flex items-center space-x-4">
           <ul className="flex space-x-6">
             <li>
-              <Link 
-                href="/" 
-                className={`hover:text-blue-100 transition-colors pb-1 border-b-2 ${
-                  isActive('/') 
-                    ? 'text-blue-100 border-blue-100' 
+              <Link
+                href="/"
+                className={`hover:text-blue-100 transition-colors pb-1 border-b-2 ${isActive('/')
+                    ? 'text-blue-100 border-blue-100'
                     : 'border-transparent'
-                }`}
+                  }`}
               >
                 Inicio
               </Link>
             </li>
             <li>
-              <Link 
-                href="/category/general/page/1" 
-                className={`hover:text-blue-100 transition-colors pb-1 border-b-2 ${
-                  isActive('/category') 
-                    ? 'text-blue-100 border-blue-100' 
+              <Link
+                href="/category/general/page/1"
+                className={`hover:text-blue-100 transition-colors pb-1 border-b-2 ${isActive('/category')
+                    ? 'text-blue-100 border-blue-100'
                     : 'border-transparent'
-                }`}
+                  }`}
               >
                 Categorías
               </Link>
             </li>
             <li>
-              <Link 
-                href="/favorites" 
-                className={`hover:text-blue-100 transition-colors pb-1 border-b-2 relative ${
-                  isActive('/favorites') 
-                    ? 'text-blue-100 border-blue-100' 
+              <Link
+                href="/favorites"
+                className={`hover:text-blue-100 transition-colors pb-1 border-b-2 relative ${isActive('/favorites')
+                    ? 'text-blue-100 border-blue-100'
                     : 'border-transparent'
-                }`}
+                  }`}
               >
                 Favoritos
                 {favorites.length > 0 && (
@@ -94,13 +91,12 @@ export default function Header() {
               </Link>
             </li>
             <li>
-              <Link 
-                href="/contacto" 
-                className={`hover:text-blue-100 transition-colors pb-1 border-b-2 ${
-                  isActive('/contacto') 
-                    ? 'text-blue-100 border-blue-100' 
+              <Link
+                href="/contacto"
+                className={`hover:text-blue-100 transition-colors pb-1 border-b-2 ${isActive('/contacto')
+                    ? 'text-blue-100 border-blue-100'
                     : 'border-transparent'
-                }`}
+                  }`}
               >
                 Contacto
               </Link>
@@ -134,39 +130,36 @@ export default function Header() {
             <div className="mb-4">
               <HeaderSearch />
             </div>
-            
+
             {/* Navegación móvil */}
             <nav className="space-y-2">
-              <Link 
-                href="/" 
+              <Link
+                href="/"
                 onClick={() => setIsMenuOpen(false)}
-                className={`block py-3 px-4 rounded-lg transition-colors ${
-                  isActive('/') 
-                    ? 'bg-blue-800 dark:bg-gray-700 text-white' 
+                className={`block py-3 px-4 rounded-lg transition-colors ${isActive('/')
+                    ? 'bg-blue-800 dark:bg-gray-700 text-white'
                     : 'text-blue-100 hover:bg-blue-800 dark:hover:bg-gray-700'
-                }`}
+                  }`}
               >
                 Inicio
               </Link>
-              <Link 
-                href="/category/general/page/1" 
+              <Link
+                href="/category/general/page/1"
                 onClick={() => setIsMenuOpen(false)}
-                className={`block py-3 px-4 rounded-lg transition-colors ${
-                  isActive('/category') 
-                    ? 'bg-blue-800 dark:bg-gray-700 text-white' 
+                className={`block py-3 px-4 rounded-lg transition-colors ${isActive('/category')
+                    ? 'bg-blue-800 dark:bg-gray-700 text-white'
                     : 'text-blue-100 hover:bg-blue-800 dark:hover:bg-gray-700'
-                }`}
+                  }`}
               >
                 Categorías
               </Link>
-              <Link 
-                href="/favorites" 
+              <Link
+                href="/favorites"
                 onClick={() => setIsMenuOpen(false)}
-                className={`block py-3 px-4 rounded-lg transition-colors relative ${
-                  isActive('/favorites') 
-                    ? 'bg-blue-800 dark:bg-gray-700 text-white' 
+                className={`block py-3 px-4 rounded-lg transition-colors relative ${isActive('/favorites')
+                    ? 'bg-blue-800 dark:bg-gray-700 text-white'
                     : 'text-blue-100 hover:bg-blue-800 dark:hover:bg-gray-700'
-                }`}
+                  }`}
               >
                 <span className="flex items-center justify-between">
                   Favoritos
@@ -177,14 +170,13 @@ export default function Header() {
                   )}
                 </span>
               </Link>
-              <Link 
-                href="/contacto" 
+              <Link
+                href="/contacto"
                 onClick={() => setIsMenuOpen(false)}
-                className={`block py-3 px-4 rounded-lg transition-colors ${
-                  isActive('/contacto') 
-                    ? 'bg-blue-800 dark:bg-gray-700 text-white' 
+                className={`block py-3 px-4 rounded-lg transition-colors ${isActive('/contacto')
+                    ? 'bg-blue-800 dark:bg-gray-700 text-white'
                     : 'text-blue-100 hover:bg-blue-800 dark:hover:bg-gray-700'
-                }`}
+                  }`}
               >
                 Contacto
               </Link>
@@ -220,4 +212,3 @@ export default function Header() {
     </header>
   );
 }
-  

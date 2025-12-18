@@ -1,9 +1,9 @@
 import './globals.css';
-import Header from "@/../components/Header"
-import Footer from "@/../components/Footer";
-import Breadcrumbs from "@/../components/Breadcrumbs";
-import { ThemeProvider } from "@/../app/contexts/ThemeContext";
-import { FavoritesProvider } from "@/../app/contexts/FavoritesContext";
+import Header from "@/components/Header"
+import Footer from "@/components/Footer";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { ThemeProvider } from "@/app/contexts/ThemeContext";
+import { FavoritesProvider } from "@/app/contexts/FavoritesContext";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

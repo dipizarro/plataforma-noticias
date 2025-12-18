@@ -1,8 +1,8 @@
 "use client";
 
-import { useFavorites } from "@/../app/contexts/FavoritesContext";
-import NewsCard from "@/../app/components/NewsCard";
-import EmptyState from "@/../app/components/EmptyState";
+import { useFavorites } from "@/app/contexts/FavoritesContext";
+import NewsCard from "@/app/components/NewsCard";
+import EmptyState from "@/app/components/EmptyState";
 
 export default function FavoritesPage() {
   const { favorites, clearFavorites } = useFavorites();
@@ -13,7 +13,7 @@ export default function FavoritesPage() {
         <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">
           Mis Favoritos ❤️
         </h1>
-        <EmptyState 
+        <EmptyState
           title="No tienes favoritos aún"
           message="Los artículos que marques como favoritos aparecerán aquí. ¡Explora las noticias y guarda las que más te interesen!"
           showSearch={true}

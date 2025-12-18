@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import SearchResultsClient from "@/../app/search/[query]/page/[page]/SearchResultsClient";
+import SearchResultsClient from "@/app/search/[query]/page/[page]/SearchResultsClient";
 
 export async function generateMetadata({
   params,

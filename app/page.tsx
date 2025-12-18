@@ -1,6 +1,6 @@
 "use client";
 
-import CategorySelector from "@/../app/components/CategorySelector";
+import CategorySelector from "@/app/components/CategorySelector";
 
 export default function Home() {
   return (
@@ -16,13 +16,13 @@ export default function Home() {
           </h1>
 
           <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto">
-            Explora noticias de diversas categorías, resumidas automáticamente con inteligencia artificial y listas para traducir al instante. 
+            Explora noticias de diversas categorías, resumidas automáticamente con inteligencia artificial y listas para traducir al instante.
             <span className="block mt-2 text-lg text-gray-500 dark:text-gray-400">
               ¡Actualízate sin perder tiempo!
             </span>
           </p>
         </div>
-        
+
         {/* Sección de categorías */}
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-gray-800 dark:text-white mb-6">

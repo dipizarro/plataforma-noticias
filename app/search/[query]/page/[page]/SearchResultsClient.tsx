@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import SkeletonLoader from "@/../app/components/SkeletonLoader";
-import ErrorDisplay from "@/../app/components/ErrorDisplay";
-import EmptyState from "@/../app/components/EmptyState";
-import NewsCard from "@/../app/components/NewsCard";
+import SkeletonLoader from "@/app/components/SkeletonLoader";
+import ErrorDisplay from "@/app/components/ErrorDisplay";
+import EmptyState from "@/app/components/EmptyState";
+import NewsCard from "@/app/components/NewsCard";
 
 type Article = {
   source: { name: string };
@@ -55,14 +55,14 @@ export default function SearchResultsPage() {
   const fetchData = async () => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       const res = await fetch(`/api/news?q=${encodeURIComponent(searchQuery)}`);
-      
+
       if (!res.ok) {
         throw new Error("No se pudieron obtener las noticias");
       }
-      
+
       const data = await res.json();
 
       if (!data.articles || data.articles.length === 0) {
@@ -175,7 +175,7 @@ export default function SearchResultsPage() {
       </h1>
 
       {articles.length === 0 ? (
-        <EmptyState 
+        <EmptyState
           title="No se encontraron noticias"
           message={`No encontramos noticias para "${searchQuery}". Intenta con otros términos de búsqueda o explora nuestras categorías.`}
         />
@@ -197,8 +197,8 @@ export default function SearchResultsPage() {
           {/* Navegación mejorada */}
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 mt-8 sm:mt-12">
             {currentPage > 1 && (
-              <button 
-                onClick={() => goToPage(currentPage - 1)} 
+              <button
+                onClick={() => goToPage(currentPage - 1)}
                 className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 transition-all font-medium shadow-sm hover:shadow-md min-h-[44px]"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -207,17 +207,17 @@ export default function SearchResultsPage() {
                 <span className="hidden sm:inline">Anterior</span>
               </button>
             )}
-            
+
             <div className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg">
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Página</span>
               <span className="text-lg font-bold text-blue-600 dark:text-blue-400">{currentPage}</span>
               <span className="text-sm font-medium text-gray-700 dark:text-gray-300">de</span>
               <span className="text-lg font-bold text-gray-900 dark:text-white">{totalPages}</span>
             </div>
-            
+
             {currentPage < totalPages && (
-              <button 
-                onClick={() => goToPage(currentPage + 1)} 
+              <button
+                onClick={() => goToPage(currentPage + 1)}
                 className="flex items-center gap-2 px-4 sm:px-6 py-3 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600 transition-all font-medium shadow-sm hover:shadow-md min-h-[44px]"
               >
                 <span className="hidden sm:inline">Siguiente</span>

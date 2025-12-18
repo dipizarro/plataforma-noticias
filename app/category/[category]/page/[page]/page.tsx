@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import CategoryPageClient from "@/../app/category/[category]/page/[page]/CategoryPageClient";
+import CategoryPageClient from "@/app/category/[category]/page/[page]/CategoryPageClient";
 
 export async function generateMetadata({
   params,
